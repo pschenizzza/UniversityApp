@@ -23,7 +23,7 @@ public class StudentController {
             @PathVariable Long groupId,
             @Valid @RequestBody CreateStudentRequest req) {
 
-        studentService.addStudent(groupId, req.getFullName());
+        studentService.addStudent(groupId, req.getFullName(), req.getAdmissionDate());
         return ResponseEntity.ok().build();
     }
 

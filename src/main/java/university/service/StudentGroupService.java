@@ -22,7 +22,9 @@ public class StudentGroupService {
     @Transactional
     public StudentGroup createGroup(String number) {
         String normalized = number == null ? "" : number.trim();
-
+        if (normalized.isBlank()) {
+            throw new IllegalArgumentException("Номер группы обязателен");
+        }
         if (groupRepository.existsByNumber(normalized)) {
             throw new IllegalArgumentException("Группа с таким номером уже существует");
         }

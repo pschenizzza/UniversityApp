@@ -18,9 +18,9 @@ public class StudentService {
     private final StudentGroupRepository groupRepository;
 
     @Transactional
-    public void addStudent(Long groupId, String fullName) {
+    public void addStudent(Long groupId, String fullName, LocalDate admissionDate) {
         StudentGroup group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Group not found: " + groupId));
+                .orElseThrow(() -> new EntityNotFoundException("Group not found: " + groupId));
 
         Student student = new Student();
         student.setGroup(group);

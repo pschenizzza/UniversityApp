@@ -61,7 +61,7 @@
     async function refreshStudents() {
         clearError();
 
-        const resp = await fetch(`/groups/${groupId}/students`, { method: 'GET' });
+        const resp = await fetch(`/api/groups/${groupId}/students`, { method: 'GET' });
         if (!resp.ok) {
             showError(`Не удалось обновить список студентов (${resp.status})`);
             return;
@@ -102,10 +102,22 @@
                 admissionDate: admissionDate
             })
         });
-
         if (!resp.ok) {
-            const text = await resp.text();
-            showError(text || `Ошибка добавления студента (${resp.status})`);
+            let message = 'Ошибка добавления студента';
+
+            const ct = resp.headers.get('content-type') || '';
+            if (ct.includes('application/json')) {
+                const data = await resp.json();
+
+                if (data.errors) {
+                    message = Object.values(data.errors).join('\n');
+                }
+                else if (data.message) {
+                    message = data.message;
+                }
+            }
+
+            showError(message);
             return;
         }
 

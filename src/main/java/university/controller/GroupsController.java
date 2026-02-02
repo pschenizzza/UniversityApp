@@ -54,7 +54,7 @@ public class GroupsController {
             Model model) {
 
         if (bindingResult.hasErrors()) {
-            return reloadGroupsPage(page, model);
+            return reloadGroupsPage(page, model, req);
         }
 
         try {
@@ -62,11 +62,11 @@ public class GroupsController {
             return "redirect:/groups/" + createdGroup.getId();
         } catch (IllegalArgumentException ex) {
             bindingResult.rejectValue("number", "duplicate", ex.getMessage());
-            return reloadGroupsPage(page, model);
+            return reloadGroupsPage(page, model, req);
         }
     }
 
-    private String reloadGroupsPage(int page, Model model) {
+    private String reloadGroupsPage(int page, Model model, CreateGroupRequest req) {
         if (page < 0) {
             page = 0;
         }
@@ -74,6 +74,7 @@ public class GroupsController {
         Page<GroupRowView> groupsPage = groupRepository.findGroupRowsOrdered(pageable);
 
         model.addAttribute("groupsPage", groupsPage);
+        model.addAttribute("createGroup", req);
         return "groups";
     }
 }
