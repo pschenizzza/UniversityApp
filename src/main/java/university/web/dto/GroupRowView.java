@@ -2,9 +2,9 @@ package university.web.dto;
 
 public interface GroupRowView {
 
-    Long getId();
+  Long getId();
 
-    String getNumber();
+  String getNumber();
 
-    long getStudentCount();
+  long getStudentCount();
 }

@@ -1,10 +1,9 @@
 package university.repository;
 
-import university.entity.Student;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import university.entity.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    List<Student> findByGroupIdOrderByFullNameAsc(Long groupId);
+  List<Student> findByGroupIdOrderByFullNameAsc(Long groupId);
 }
