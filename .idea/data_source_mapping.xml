@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/.idea/queries/Query.sql" value="239fe0f7-d56b-4d6d-97b4-5958e13ecf9e" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/v1_init.sql" value="239fe0f7-d56b-4d6d-97b4-5958e13ecf9e" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/v2_add_indexes.sql" value="239fe0f7-d56b-4d6d-97b4-5958e13ecf9e" />
+  </component>
+</project>

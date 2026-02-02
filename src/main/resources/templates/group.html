@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Группа № ' + ${group.number}">Группа</title>
+    <style>
+        table { border-collapse: collapse; }
+        td, th { border: 1px solid #ccc; padding: 6px 10px; }
+        .row { margin: 10px 0; }
+        input { padding: 4px 6px; }
+        button { padding: 4px 8px; }
+        .error { color: #b00020; margin-top: 6px; }
+        .actions a { cursor: pointer; color: #1a73e8; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<h2 th:text="'Группа № ' + ${group.number}">Группа №</h2>
+
+<div id="errorBox" class="error" style="display:none;"></div>
+
+<div class="row">
+    <label for="fio">ФИО</label>
+    <input id="fio" type="text"/>
+
+    <label for="date">Дата принятия</label>
+    <input id="date" type="date"/>
+
+    <button type="button" onclick="addStudent()">
+        Принять нового студента
+    </button>
+</div>
+
+<button type="button" onclick="refreshStudents()">Обновить список студентов</button>
+
+<div id="studentsBlock"
+     th:insert="~{students :: table(${students}, ${group.id})}">
+</div>
+
+<div class="row">
+    <button type="button" onclick="window.location.href='/groups'">
+        Вернуться к списку групп
+    </button>
+</div>
+
+<script th:inline="javascript">
+    const groupId = /*[[${group.id}]]*/ 0;
+
+    function showError(text) {
+        const box = document.getElementById('errorBox');
+        box.textContent = text;
+        box.style.display = 'block';
+    }
+
+    function clearError() {
+        const box = document.getElementById('errorBox');
+        box.textContent = '';
+        box.style.display = 'none';
+    }
+
+    async function refreshStudents() {
+        clearError();
+
+        const resp = await fetch(`/groups/${groupId}/students`, { method: 'GET' });
+        if (!resp.ok) {
+            showError(`Не удалось обновить список студентов (${resp.status})`);
+            return;
+        }
+
+        const html = await resp.text();
+
+        const block = document.getElementById('studentsBlock');
+        if (!block) {
+            showError('studentsBlock не найден ');
+            return;
+        }
+
+        block.innerHTML = html;
+    }
+
+
+    async function addStudent() {
+        clearError();
+
+        const fullName = document.getElementById('fio').value.trim();
+        const admissionDate = document.getElementById('date').value; // yyyy-MM-dd
+
+        if (!fullName) {
+            showError('Введите ФИО');
+            return;
+        }
+        if (!admissionDate) {
+            showError('Выберите дату принятия');
+            return;
+        }
+
+        const resp = await fetch(`/groups/${groupId}/students`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                fullName: fullName,
+                admissionDate: admissionDate
+            })
+        });
+
+        if (!resp.ok) {
+            const text = await resp.text();
+            showError(text || `Ошибка добавления студента (${resp.status})`);
+            return;
+        }
+
+        document.getElementById('fio').value = '';
+        document.getElementById('date').value = '';
+        await refreshStudents();
+    }
+
+    async function deleteStudent(studentId) {
+        clearError();
+        const resp = await fetch(`/students/${studentId}`, { method: 'DELETE' });
+
+        if (!resp.ok) {
+            const text = await resp.text();
+            showError(text || `Ошибка удаления студента (${resp.status})`);
+            return;
+        }
+
+        await refreshStudents();
+    }
+</script>
+
+</body>
+</html>
