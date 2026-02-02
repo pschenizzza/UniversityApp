@@ -61,7 +61,8 @@
     async function refreshStudents() {
         clearError();
 
-        const resp = await fetch(`/api/groups/${groupId}/students`, { method: 'GET' });
+        const resp = await fetch(`/groups/${groupId}/students`);
+
         if (!resp.ok) {
             showError(`Не удалось обновить список студентов (${resp.status})`);
             return;
@@ -77,7 +78,6 @@
 
         block.innerHTML = html;
     }
-
 
     async function addStudent() {
         clearError();

@@ -3,24 +3,22 @@
 <body>
 
 <div th:fragment="table(students, groupId)">
-    <table>
+    <table th:fragment="table(students, groupId)">
         <thead>
         <tr>
-            <th>ФИО студента</th>
-            <th>Действия</th>
+            <th style="text-align: left;">Дата принятия</th>
+            <th style="text-align: left;">ФИО студента</th>
+            <th style="text-align: left;">Действия</th>
         </tr>
         </thead>
-
         <tbody>
-        <tr th:if="${#lists.isEmpty(students)}">
-            <td colspan="2">Пока нет студентов</td>
-        </tr>
-
         <tr th:each="s : ${students}">
-            <td th:text="${s.fullName}">ФИО</td>
+            <td th:text="${#temporals.format(s.admissionDate, 'dd.MM.yyyy')}"></td>
+
+            <td th:text="${s.fullName}"></td>
+
             <td class="actions">
-                <a href="javascript:void(0)"
-                   th:attr="onclick=|deleteStudent(${s.id})|">Delete</a>
+                <a th:onclick="'deleteStudent(' + ${s.id} + ')'">Удалить</a>
             </td>
         </tr>
         </tbody>

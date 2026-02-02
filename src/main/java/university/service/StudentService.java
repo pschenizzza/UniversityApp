@@ -25,7 +25,7 @@ public class StudentService {
         Student student = new Student();
         student.setGroup(group);
         student.setFullName(fullName.trim());
-        student.setAdmissionDate(LocalDate.now());
+        student.setAdmissionDate(admissionDate);
 
         studentRepository.save(student);
     }

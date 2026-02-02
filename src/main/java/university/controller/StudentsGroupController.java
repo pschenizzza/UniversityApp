@@ -38,10 +38,11 @@ public class StudentsGroupController {
 
     @GetMapping("/groups/{groupId}/students")
     public String studentsFragment(@PathVariable Long groupId, Model model) {
-        List<Student> students = studentRepository.findByGroupIdOrderByFullNameAsc(groupId);
-
+        model.addAttribute(
+                "students",
+                studentRepository.findByGroupIdOrderByFullNameAsc(groupId)
+        );
         model.addAttribute("groupId", groupId);
-        model.addAttribute("students", students);
         return "students :: table";
     }
     @PostMapping(
